@@ -3,9 +3,37 @@ from lxml import etree
 import time
 import requests
 import sqlite3
+import http.server
+import socketserver
+from threading import Thread
+from concurrent.futures import Future
 
 #TODO: youtube api/rss feed to get video list
 #example request for youtube rss feed: https://www.youtube.com/feeds/videos.xml?channel_id=UCsB0LwkHPWyjfZ-JwvtwEXw
+def call_with_future(fn, future, args, kwargs):
+    try:
+        result = fn(*args, **kwargs)
+        future.set_result(result)
+    except Exception as exc:
+        future.set_exception(exc)
+
+def threaded(fn):
+    def wrapper(*args, **kwargs):
+        future = Future()
+        Thread(target=call_with_future, args=(fn, future, args, kwargs)).start()
+        return future
+    return wrapper
+
+@threaded    
+def start_server():
+    PORT = 9000
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory='serve',**kwargs)
+                
+    with socketserver.TCPServer(('',PORT), Handler) as httpd:
+        print(f'Serving at port {PORT}')
+        httpd.serve_forever()
 
 class RSSreader:
     """
@@ -13,7 +41,9 @@ class RSSreader:
     """
     def __init__(self, feedurl):
         self.feedurl = feedurl
-
+        
+        
+    @threaded
     def update_check(self):
         feed = requests.get(self.feedurl).content
         namespaces = {'atom':'http://www.w3.org/2005/Atom'}
@@ -34,15 +64,17 @@ class RSSgenerator:
     
     def __init__(self, xmlfile):
         self.xmlfile = xmlfile
-        self.db = sqlite3.connect('processed.db')
-        self.c = self.db.cursor()
-        self.c.execute('''CREATE TABLE IF NOT EXISTS processed (link text, date text)''')
-        self.db.commit()
+        db = sqlite3.connect('processed.db')
+        c = db.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS processed (link text, date text)''')
+        db.commit()
     
+    @threaded
     def download_and_transform(self, videourl):
         
         #Check if link has already been processed
-        c = self.c
+        db = sqlite3.connect('processed.db')
+        c = db.cursor()
         c.execute('SELECT * FROM processed')
         processed_links = [x[0] for x in c.fetchall()]
         if videourl in processed_links:
@@ -51,6 +83,7 @@ class RSSgenerator:
 
         ydl_opts = {
             'format':'bestaudio/best',
+            'outtmpl':'serve/storage/%(title)s.%(ext)s',
             'postprocessors': [{
                 'key':'FFmpegExtractAudio',
                 'preferredcodec':'mp3',
@@ -63,10 +96,11 @@ class RSSgenerator:
 
         print(info['webpage_url'], info['upload_date'])
         c.execute("INSERT INTO processed VALUES (?,?)", [info['webpage_url'],info['upload_date']])
-        self.db.commit()
+        db.commit()
 
         return info
 
+    @threaded
     def update_RSS(self, titletext, linktext, audiofile):
         """
         Update RSS feed with new entries downloaded and transcoded to mp3.
@@ -96,3 +130,23 @@ class RSSgenerator:
         #Insert the element and overwrite the old RSS file
         channel.insert(3, newItem)
         tree.write(xmlfile, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+
+
+
+if __name__ == "__main__":
+    with open('channels.txt','r') as file:
+        channels = file.readlines()
+
+    server = start_server()
+    SERVER_IP = 'localhost:9000'
+
+    for channel in channels:
+        reader = RSSreader(channel.strip())
+        values = reader.update_check()
+        values = values.result()
+        writer = RSSgenerator(f'serve/feed.xml')
+        for url in values:
+            info = writer.download_and_transform(url)
+            info = info.result()
+            if info != 0:
+                writer.update_RSS(info['title'],info['webpage_url'],f"{SERVER_IP}/storage/{info['title']}")
