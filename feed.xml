@@ -1,0 +1,13 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<rss version = "2.0">
+    <channel>
+        <title>Personal podcast rss feed</title>
+        <link>http://borlaugcluster.com/</link>
+        <description>private personal feed of podcasts</description>
+        <item>
+            <title>Test item 1</title>
+            <link>http://borlaugcluster.com/</link>
+            <enclosure url="http://borlaugcluster.com/test1/" type = "audio/mpeg"/>
+        </item>
+    </channel>
+</rss>

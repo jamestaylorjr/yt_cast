@@ -1,0 +1,5 @@
+ytpodcast.code-workspace
+__pycache__/app.cpython-35.pyc
+__pycache__/app.cpython-37.pyc
+newfeed.xml
+processed.db
