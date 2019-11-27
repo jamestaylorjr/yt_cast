@@ -7,6 +7,7 @@ import http.server
 import socketserver
 from threading import Thread
 from concurrent.futures import Future
+from random import randint
 
 #TODO: youtube api/rss feed to get video list
 #example request for youtube rss feed: https://www.youtube.com/feeds/videos.xml?channel_id=UCsB0LwkHPWyjfZ-JwvtwEXw
@@ -101,7 +102,7 @@ class RSSgenerator:
         return info
 
     @threaded
-    def update_RSS(self, titletext, linktext, audiofile):
+    def update_RSS(self, info, audiofile):
         """
         Update RSS feed with new entries downloaded and transcoded to mp3.
         ---------
@@ -120,11 +121,19 @@ class RSSgenerator:
         #Generate the new element
         newItem = etree.Element('item')
         title = etree.SubElement(newItem,'title')
-        title.text = titletext
+        title.text = info['title']
+        desc = etree.SubElement(newItem, 'description')
+        desc.text = info['description']
+        pub = etree.SubElement(newItem, 'pubDate')
+        pub.text = info['upload_date']
         link = etree.SubElement(newItem,'link')
-        link.text = linktext
+        link.text = info['webpage_url']
+        guid = etree.SubElement(newItem, 'guid')
+        guid.set('isPermaLink','false')
+        guid.text = randint(1,10000)
         enc = etree.SubElement(newItem,'enclosure')
         enc.set('url', audiofile)
+        enc.set('length', info['duration'])
         enc.set('type','audio/mpeg')
 
         #Insert the element and overwrite the old RSS file
@@ -149,4 +158,4 @@ if __name__ == "__main__":
             info = writer.download_and_transform(url)
             info = info.result()
             if info != 0:
-                writer.update_RSS(info['title'],info['webpage_url'],f"{SERVER_IP}/storage/{info['title']}")
+                writer.update_RSS(info,f"{SERVER_IP}/storage/{info['title']}")
