@@ -130,10 +130,10 @@ class RSSgenerator:
         link.text = linktext
         guid = etree.SubElement(newItem, 'guid')
         guid.set('isPermaLink','false')
-        guid.text = randint(1,10000)
+        guid.text = str(randint(1,10000))
         enc = etree.SubElement(newItem,'enclosure')
         enc.set('url', audiofile)
-        enc.set('length', info['duration'])
+        enc.set('length', str(info['duration']))
         enc.set('type','audio/mpeg')
 
         #Insert the element and overwrite the old RSS file
@@ -159,5 +159,5 @@ if __name__ == "__main__":
             info = writer.download_and_transform(url)
             info = info.result()
             if info != 0:
-                writer.update_RSS(info['title'],info['description'],info['upload_date'],info['webpage_url'],info['duration'],f"{SERVER_IP}/storage/{info['title']}")
+                writer.update_RSS(info['title'],info['description'],info['upload_date'],info['webpage_url'],info['duration'],f"{SERVER_IP}/storage/{info['title']}.mp3")
                 
