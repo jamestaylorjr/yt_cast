@@ -131,11 +131,12 @@ class RSSgenerator:
         guid = etree.SubElement(newItem, 'guid')
         guid.set('isPermaLink','false')
         guid.text = str(randint(1,10000))
+        
         enc = etree.SubElement(newItem,'enclosure')
         enc.set('url', audiofile)
-        enc.set('length', str(info['duration']))
+        enc.set('length', str(duration))
         enc.set('type','audio/mpeg')
-
+    
         #Insert the element and overwrite the old RSS file
         channel.insert(3, newItem)
         tree.write(xmlfile, pretty_print=True, xml_declaration=True, encoding='UTF-8')
@@ -150,14 +151,15 @@ if __name__ == "__main__":
     server = start_server()
     SERVER_IP = 'localhost:9000'
 
-    for channel in channels:
-        reader = RSSreader(channel.strip())
-        values = reader.update_check()
-        values = values.result()
-        writer = RSSgenerator(f'serve/feed.xml')
-        for url in values:
-            info = writer.download_and_transform(url)
-            info = info.result()
-            if info != 0:
-                writer.update_RSS(info['title'],info['description'],info['upload_date'],info['webpage_url'],info['duration'],f"{SERVER_IP}/storage/{info['title']}.mp3")
-                
+    while True:
+        for channel in channels:
+            reader = RSSreader(channel.strip())
+            values = reader.update_check()
+            values = values.result()
+            writer = RSSgenerator(f'serve/feed.xml')
+            for url in values:
+                info = writer.download_and_transform(url)
+                info = info.result()
+                if info != 0:
+                    writer.update_RSS(info['title'],info['description'],info['upload_date'],info['webpage_url'],info['duration'],f"{SERVER_IP}/storage/{info['title']}.mp3")
+        time.sleep(600)
