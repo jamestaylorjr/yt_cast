@@ -102,7 +102,7 @@ class RSSgenerator:
         return info
 
     @threaded
-    def update_RSS(self, info, audiofile):
+    def update_RSS(self, titletext, desctext, pubtext, linktext, duration, audiofile):
         """
         Update RSS feed with new entries downloaded and transcoded to mp3.
         ---------
@@ -121,13 +121,13 @@ class RSSgenerator:
         #Generate the new element
         newItem = etree.Element('item')
         title = etree.SubElement(newItem,'title')
-        title.text = info['title']
+        title.text = titletext
         desc = etree.SubElement(newItem, 'description')
-        desc.text = info['description']
+        desc.text = desctext
         pub = etree.SubElement(newItem, 'pubDate')
-        pub.text = info['upload_date']
+        pub.text = pubtext
         link = etree.SubElement(newItem,'link')
-        link.text = info['webpage_url']
+        link.text = linktext
         guid = etree.SubElement(newItem, 'guid')
         guid.set('isPermaLink','false')
         guid.text = randint(1,10000)
@@ -139,6 +139,7 @@ class RSSgenerator:
         #Insert the element and overwrite the old RSS file
         channel.insert(3, newItem)
         tree.write(xmlfile, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+        print('xml updated')
 
 
 
@@ -158,4 +159,5 @@ if __name__ == "__main__":
             info = writer.download_and_transform(url)
             info = info.result()
             if info != 0:
-                writer.update_RSS(info,f"{SERVER_IP}/storage/{info['title']}")
+                writer.update_RSS(info['title'],info['description'],info['upload_date'],info['webpage_url'],info['duration'],f"{SERVER_IP}/storage/{info['title']}")
+                
