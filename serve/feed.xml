@@ -4,65 +4,6 @@
     <title>Personal podcast rss feed</title>
     <link>http://borlaugcluster.com/</link>
     <description>private personal feed of podcasts</description>
-    <item>
-      <title>Bloopers and Behind the Scenes of AH: The Musical</title>
-      <link>https://www.youtube.com/watch?v=dBef2lW402Y</link>
-      <enclosure url="localhost:9000/storage/Bloopers and Behind the Scenes of AH: The Musical" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Out in the Grapes - AH Animated (GTA V)</title>
-      <link>https://www.youtube.com/watch?v=XwqMgZ6O3vg</link>
-      <enclosure url="localhost:9000/storage/Out in the Grapes - AH Animated (GTA V)" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Kids Content is Weird - Off Topic #207</title>
-      <link>https://www.youtube.com/watch?v=fJWndRZxflg</link>
-      <enclosure url="localhost:9000/storage/Kids Content is Weird - Off Topic #207" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Celebrating 500 AHWU's By Recreating the First - AHWU for November 18th, 2019 (#500)</title>
-      <link>https://www.youtube.com/watch?v=1zky1cM9jvI</link>
-      <enclosure url="localhost:9000/storage/Celebrating 500 AHWU's By Recreating the First - AHWU for November 18th, 2019 (#500)" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Cereal Bowl: Which Cereal Ranks Supreme? - Ready Set Show</title>
-      <link>https://www.youtube.com/watch?v=c--iFJHRlRA</link>
-      <enclosure url="localhost:9000/storage/Cereal Bowl: Which Cereal Ranks Supreme? - Ready Set Show" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Reservoir Dogs the Game - Cash n Guns - Let's Roll</title>
-      <link>https://www.youtube.com/watch?v=ZXgkDNhGk1Q</link>
-      <enclosure url="localhost:9000/storage/Reservoir Dogs the Game - Cash n Guns - Let's Roll" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Good at Being Bad - Achievement Hunter: The Musical (Official Video)</title>
-      <link>https://www.youtube.com/watch?v=Tf-qS5y0J9w</link>
-      <enclosure url="localhost:9000/storage/Good at Being Bad - Achievement Hunter: The Musical (Official Video)" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Unexpected Moon Ball Trick Shots - Between the Games</title>
-      <link>https://www.youtube.com/watch?v=rem1ErJDRnU</link>
-      <enclosure url="localhost:9000/storage/Unexpected Moon Ball Trick Shots - Between the Games" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Hard 2 Breathe - Achievement Hunter: The Musical (Official Video)</title>
-      <link>https://www.youtube.com/watch?v=5zX1YbVJm-c</link>
-      <enclosure url="localhost:9000/storage/Hard 2 Breathe - Achievement Hunter: The Musical (Official Video)" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>What Does an Orca Sound Like? - AH Animated (GTA V)</title>
-      <link>https://www.youtube.com/watch?v=AAcoajUOIAI</link>
-      <enclosure url="localhost:9000/storage/What Does an Orca Sound Like? - AH Animated (GTA V)" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Lindsay Wins - Achievement Hunter: The Musical (Official Video)</title>
-      <link>https://www.youtube.com/watch?v=qiKB4LyDwtg</link>
-      <enclosure url="localhost:9000/storage/Lindsay Wins - Achievement Hunter: The Musical (Official Video)" type="audio/mpeg"/>
-    </item>
-    <item>
-      <title>Pokémon Boycott and 2010-19 - #208</title>
-      <link>https://www.youtube.com/watch?v=meGVsnjn7lg</link>
-      <enclosure url="localhost:9000/storage/Pokémon Boycott and 2010-19 - #208" type="audio/mpeg"/>
-    </item>
+    
   </channel>
 </rss>
