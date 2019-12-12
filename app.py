@@ -130,7 +130,7 @@ class RSSgenerator:
         link.text = linktext
         guid = etree.SubElement(newItem, 'guid')
         guid.set('isPermaLink','false')
-        guid.text = str(randint(1,10000))
+        guid.text = linktext
         
         enc = etree.SubElement(newItem,'enclosure')
         enc.set('url', audiofile)
